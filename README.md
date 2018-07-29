@@ -1,2 +1,2 @@
-# atmega328
-A repository for atmega328
+# atmega328p
+A repository for atmega328p
