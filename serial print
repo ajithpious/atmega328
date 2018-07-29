@@ -1,0 +1,48 @@
+This program write the value 2 continuously through USART
+#include <avr/io.h>
+#include <util/delay.h>
+
+static void 
+serial_init(unsigned int bittimer)
+{
+	/* Set the baud rate */
+	UBRR0H =0x00;
+	UBRR0L = 0x67;
+	/* set the framing to 8N1 */
+	UCSR0C = 0x07;
+	
+	/* Engage! */
+	UCSR0B = (1 << RXEN0) | (1 << TXEN0);
+	//RXEN0=0b1;
+	//TXEN0=0b1;
+	return;
+}
+
+static void
+serial_write(int c)
+{
+	while ( !(UCSR0A & (1 << UDRE0)) );
+	UDR0 = c;
+}
+
+#define SPEED 9600
+#define F_CPU 16000000
+
+int
+main (void)
+{
+	int i = 0;
+	int str = 2;
+
+	/* let the preprocessor calculate this */
+	serial_init( ( F_CPU / SPEED / 16 ) - 1);
+
+	while (1) {
+		serial_write(str);
+			_delay_ms(500);
+		}
+		return 0;
+}
+	
+
+
